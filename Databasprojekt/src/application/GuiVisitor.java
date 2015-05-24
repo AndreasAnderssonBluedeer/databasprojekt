@@ -1,5 +1,5 @@
 package application;
 
-public class Gui {
+public class GuiVisitor {
 	int hej;
 }
