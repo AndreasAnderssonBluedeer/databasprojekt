@@ -42,23 +42,25 @@ public JPanel showStartScreen(){
 	pnlStart.setBackground(Color.DARK_GRAY);
 	pnlStart.setPreferredSize(new Dimension(800,400));
 	
-//	btnSchedule=new JButton("Spelscheman");
-//	btnSchedule.setPreferredSize(new Dimension(300,60));
-//	btnSchedule.setBackground(Color.GRAY);
-//	btnSchedule.addActionListener(new ScheduleListener());
-//	
-//	btnBand=new JButton("Band");
-//	btnBand.setPreferredSize(new Dimension(300,60));
-//	btnBand.setBackground(Color.GRAY);
-//	btnBand.addActionListener(new BandListener());		
+	btnSchedule=new JButton("Spelscheman");
+	btnSchedule.setPreferredSize(new Dimension(300,60));
+	btnSchedule.setBackground(Color.GRAY);
+	btnSchedule.addActionListener(new ScheduleListener());
+	
+	btnBand=new JButton("Band");
+	btnBand.setPreferredSize(new Dimension(300,60));
+	btnBand.setBackground(Color.GRAY);
+	btnBand.addActionListener(new BandListener());		
 	
 	btnContact=new JButton("Kontaktpersoner");
 	btnContact.setPreferredSize(new Dimension(300,60));
 	btnContact.setBackground(Color.GRAY);
+	btnContact.addActionListener(new ContactListener());
 	
 	btnSecurity=new JButton("Säkerhetsansvariga");
 	btnSecurity.setPreferredSize(new Dimension(300,60));
 	btnSecurity.setBackground(Color.GRAY);
+	btnSecurity.addActionListener(new SecurityListener());
 	
 	pnlStart.add(btnContact);
 	pnlStart.add(btnSecurity);	
@@ -96,8 +98,34 @@ private class ScheduleListener implements ActionListener{
 	}
 	
 }
+private class ContactListener implements ActionListener{
 
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource()==btnContact){
+			pnlStart.setBackground(Color.BLUE);
+			//Hämta o visa Spelschema JPanel.
+			//Hämta information från databas.
+			//Ta bort /Disable förra panelen.
+		}
+		
+	}
+	
+}
+private class SecurityListener implements ActionListener{
 
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource()==btnSecurity){
+			pnlStart.setBackground(Color.ORANGE);
+			//Hämta o visa Spelschema JPanel.
+			//Hämta information från databas.
+			//Ta bort /Disable förra panelen.
+		}
+		
+	}
+	
+}
 
 
 
@@ -108,7 +136,7 @@ private class ScheduleListener implements ActionListener{
 public static void main(String [] args){
 	JFrame f= new JFrame("Festivalinfo-Personal");
 	f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	f.add(new GuiVisitor());
+	f.add(new GuiStaff());
 	f.setLocation(500, 100);
 	f.setSize(800, 600);
 	f.setVisible(true);
