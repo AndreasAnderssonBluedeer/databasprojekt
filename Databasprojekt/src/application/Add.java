@@ -187,7 +187,7 @@ public class Add {
 //			q.addBand();
 //			q.addContact();
 //			q.addMember("Mutallica");
-			q.addSecurity();
+//			q.addSecurity();
 //			q.addAct();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

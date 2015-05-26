@@ -25,8 +25,10 @@ import javax.swing.ScrollPaneConstants;
 
 public class GuiStaff extends JPanel {
 
+	private QuestionController controller = new QuestionController();
 	
-
+	private ArrayList<String> bands = new ArrayList <>();
+	
 	private JButton btnSchedule,btnBand,btnContact,btnSecurity,btnHome,
 			btnThursday,btnFriday,btnSaturday,btnAddTime,btnRemoveTime,
 			btnRemoveBand,btnAddBand,btnAddContact,btnRemoveContact,btnAddBandContact
@@ -43,7 +45,6 @@ public class GuiStaff extends JPanel {
 
 	
 	public GuiStaff(){	
-	
 		
 		pnlStart=showStartScreen();
 		pnlBandMenu=showBands();
@@ -214,7 +215,13 @@ public JPanel showSchedule(){
 }
 
 public JPanel showBands(){
-
+		
+		try {
+			bands = controller.getBands();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
 		JPanel pnlBandMenu=new JPanel();
 		pnlBandMenu.setBackground(Color.DARK_GRAY);
 		pnlBandMenu.setPreferredSize(new Dimension(800,600));
@@ -255,8 +262,8 @@ public JPanel showBands(){
 	    pnlBandMenu.add(jsp);
 		
 		ArrayList<JButton> btnBandList=new ArrayList<>();
-		for(int i=0;i<55;i++){	//Kommer sedan bli bandlistans längd*
-			btnBandList.add(new JButton("Band"+i));	//Band+i ==Databas-BandNamn
+		for(int i=0;i<bands.size();i++){	//Kommer sedan bli bandlistans längd*
+			btnBandList.add(new JButton(bands.get(i)));	//Band+i ==Databas-BandNamn
 			btnBandList.get(i).setSize(new Dimension(250,30));
 			btnBandList.get(i).setBackground(Color.GRAY);
 			btnBandList.get(i).addActionListener(new MemberListener());
@@ -458,6 +465,8 @@ public void clearSchedule(){
 	pnlSchedule.remove(pnlThursday);
 	pnlSchedule.remove(pnlSaturday);
 }
+	
+	
 
 private class BandListener implements ActionListener{
 
