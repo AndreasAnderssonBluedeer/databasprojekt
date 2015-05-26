@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 public class GuiStaff extends JPanel {
 
 	
-	private JButton btnSchedule,btnBand,btnContact,btnSecurity,btnHome;
+	private JButton btnSchedule,btnBand,btnContact,btnSecurity,btnHome, btnAdd, btnRemove;
 	private JPanel pnlStart,pnlMain,pnlBands,pnlContacts,pnlSecurity;
 	
 	public GuiStaff(){	
@@ -94,15 +94,24 @@ public JPanel showBands(){
 	pnlBand.setBackground(Color.DARK_GRAY);
 	pnlBand.setPreferredSize(new Dimension(800,600));
 	
+	btnAdd = new JButton("Add");
+	btnRemove = new JButton("Remove");
+	btnAdd.addActionListener(new addBandListener());
+	btnRemove.addActionListener(new removeBandListener());
+	
 	pnlBand.add(getHomeBtn());
+	pnlBand.add(btnAdd);
+	pnlBand.add(btnRemove);
 	
 	JLabel lblTitle=new JLabel("BAND:");
 	lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
 	lblTitle.setHorizontalAlignment(JLabel.RIGHT);
 	lblTitle.setForeground(Color.LIGHT_GRAY);
 	lblTitle.setPreferredSize(new Dimension(600,80));
+
 	
 	pnlBand.add(lblTitle);
+
 	
 	ArrayList<JButton> btnBandList=new ArrayList<>();
 	for(int i=0;i<21;i++){	//Kommer sedan bli bandlistans längd*
@@ -119,15 +128,24 @@ public JPanel showContacts(){
 	pnlContact.setBackground(Color.DARK_GRAY);
 	pnlContact.setPreferredSize(new Dimension(800,600));
 	
+	btnAdd = new JButton("Add");
+	btnRemove = new JButton("Remove");
+	btnAdd.addActionListener(new addContactListener());
+	btnRemove.addActionListener(new removeContactListener());
+	
 	pnlContact.add(getHomeBtn());
+	pnlContact.add(btnAdd);
+	pnlContact.add(btnRemove);
 	
 	JLabel lblTitle=new JLabel("Kontaktpersoner:");
 	lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
 	lblTitle.setHorizontalAlignment(JLabel.RIGHT);
 	lblTitle.setForeground(Color.LIGHT_GRAY);
 	lblTitle.setPreferredSize(new Dimension(450,80));
+
 	
 	pnlContact.add(lblTitle);
+
 	
 	ArrayList<JButton> btnContactList=new ArrayList<>();
 	for(int i=0;i<20;i++){	//Kommer sedan bli bandlistans längd*
@@ -144,16 +162,24 @@ public JPanel showSecurity(){
 	pnlSecurity.setBackground(Color.DARK_GRAY);
 	pnlSecurity.setPreferredSize(new Dimension(800,600));
 	
+	btnAdd = new JButton("Add");
+	btnRemove = new JButton("Remove");
+	btnAdd.addActionListener(new addSecurityListener());
+	btnRemove.addActionListener(new removeSecurityListener());
 	
 	pnlSecurity.add(getHomeBtn());
+	pnlSecurity.add(btnAdd);
+	pnlSecurity.add(btnRemove);
 	
 	JLabel lblTitle=new JLabel("Säkerhetsansvariga:");
 	lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
 	lblTitle.setHorizontalAlignment(JLabel.RIGHT);
 	lblTitle.setForeground(Color.LIGHT_GRAY);
 	lblTitle.setPreferredSize(new Dimension(550,80));
+
 	
 	pnlSecurity.add(lblTitle);
+
 	
 	ArrayList<JButton> btnSecurityList=new ArrayList<>();
 	for(int i=0;i<20;i++){	//Kommer sedan bli bandlistans längd*
@@ -246,6 +272,107 @@ private class HomeListener implements ActionListener{
 	
 }
 
+private class addContactListener implements ActionListener{
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+			clearPanel();	
+			pnlMain.add(pnlStart);
+			pnlMain.revalidate();
+			repaintMenu();
+			//Hämta information från databas.
+			//Ta bort /Disable förra panelen.
+		
+		
+	}
+	
+}
+
+private class removeContactListener implements ActionListener{
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+			clearPanel();	
+			pnlMain.add(pnlStart);
+			pnlMain.revalidate();
+			repaintMenu();
+			//Hämta information från databas.
+			//Ta bort /Disable förra panelen.
+		
+		
+	}
+	
+}
+
+private class addBandListener implements ActionListener{
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+			clearPanel();	
+			pnlMain.add(pnlStart);
+			pnlMain.revalidate();
+			repaintMenu();
+			//Hämta information från databas.
+			//Ta bort /Disable förra panelen.
+		
+		
+	}
+	
+}
+
+private class removeBandListener implements ActionListener{
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+			clearPanel();	
+			pnlMain.add(pnlStart);
+			pnlMain.revalidate();
+			repaintMenu();
+			//Hämta information från databas.
+			//Ta bort /Disable förra panelen.
+		
+		
+	}
+	
+}
+
+private class addSecurityListener implements ActionListener{
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+			clearPanel();	
+			pnlMain.add(pnlStart);
+			pnlMain.revalidate();
+			repaintMenu();
+			//Hämta information från databas.
+			//Ta bort /Disable förra panelen.
+		
+		
+	}
+	
+}
+
+private class removeSecurityListener implements ActionListener{
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+			clearPanel();	
+			pnlMain.add(pnlStart);
+			pnlMain.revalidate();
+			repaintMenu();
+			//Hämta information från databas.
+			//Ta bort /Disable förra panelen.
+		
+		
+	}
+	
+}
 
 
 public static void main(String [] args){
