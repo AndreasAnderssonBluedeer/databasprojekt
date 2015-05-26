@@ -30,7 +30,7 @@ public class GuiStaff extends JPanel {
 	private JButton btnSchedule,btnBand,btnContact,btnSecurity,btnHome,
 			btnThursday,btnFriday,btnSaturday,btnAddTime,btnRemoveTime,
 			btnRemoveBand,btnAddBand,btnAddContact,btnRemoveContact,btnAddBandContact
-			,btnAddSecurity,btnRemoveSecurity,btnAddStageSecurity;
+			,btnAddSecurity,btnRemoveSecurity,btnAddStageSecurity,btnAddMember,btnRemoveMember;
 	
 	private JPanel pnlStart,pnlMain,pnlBandMenu,pnlContacts,pnlSecurity,
 				   pnlSchedule,pnlThursday,pnlFriday,pnlSaturday,pnlBandMembers;
@@ -39,6 +39,7 @@ public class GuiStaff extends JPanel {
 	
 	private String bandname;
 
+	private boolean removeTime,removeBand,removeMember,removeContact,removeSecurity;
 
 	
 	public GuiStaff(){	
@@ -96,6 +97,7 @@ public class GuiStaff extends JPanel {
 				btnDayList.add(new JButton("Torsdag StartTid:17.00 SlutTid:18.00 Band: "+i));	//Band+i ==Databas-BandNamn
 				btnDayList.get(i).setSize(new Dimension(400,35));
 				btnDayList.get(i).setBackground(Color.GRAY);
+				btnDayList.get(i).addActionListener(new ScheduleListener());
 				pnlDay.add(btnDayList.get(i));
 			}
 		}if(day.equals("Fredag")){
@@ -104,6 +106,7 @@ public class GuiStaff extends JPanel {
 				btnDayList.add(new JButton("Fredag StartTid:17.00 SlutTid:18.00 Band: "+i));	//Band+i ==Databas-BandNamn
 				btnDayList.get(i).setSize(new Dimension(400,35));
 				btnDayList.get(i).setBackground(Color.GRAY);
+				btnDayList.get(i).addActionListener(new ScheduleListener());
 				pnlDay.add(btnDayList.get(i));
 			}
 		}if(day.equals("Lördag")){
@@ -112,6 +115,7 @@ public class GuiStaff extends JPanel {
 				btnDayList.add(new JButton("Lördag StartTid:17.00 SlutTid:18.00 Band: "+i));	//Band+i ==Databas-BandNamn
 				btnDayList.get(i).setSize(new Dimension(400,35));
 				btnDayList.get(i).setBackground(Color.GRAY);
+				btnDayList.get(i).addActionListener(new ScheduleListener());
 				pnlDay.add(btnDayList.get(i));
 			}
 		}
@@ -320,6 +324,7 @@ public JPanel showContacts(){
 		btnContactList.add(new JButton("911014-164"+i+"| FÖRNAMN EFTERNAMN "+i+"|Band "+i));
 		btnContactList.get(i).setSize(new Dimension(600,30));
 		btnContactList.get(i).setBackground(Color.GRAY);
+		btnContactList.get(i).addActionListener(new ContactListener());
 		pnl.add(btnContactList.get(i));
 	}
 	pnlContact.add(jsp);
@@ -381,6 +386,7 @@ public JPanel showSecurity(){
 		btnSecurityList.add(new JButton("911014-164"+i+"| FÖRNAMN EFTERNAMN "+i));	//Band+i ==Databas-BandNamn
 		btnSecurityList.get(i).setPreferredSize(new Dimension(350,30));
 		btnSecurityList.get(i).setBackground(Color.GRAY);
+		btnSecurityList.get(i).addActionListener(new SecurityListener());
 		pnl.add(btnSecurityList.get(i));
 	}
 	pnlSecurity.add(jsp);
@@ -394,35 +400,52 @@ public JPanel showBandMembers(String name){
 	pnlBandMembers.setPreferredSize(new Dimension(800,600));
 	
 	pnlBandMembers.add(getHomeBtn());
+	btnAddMember=new JButton("Lägg till Bandmedlem");
+	btnAddMember.setPreferredSize(new Dimension(200,20));
+	btnAddMember.setBackground(Color.GRAY);
+	btnAddMember.addActionListener(new UpdateMemberListener());
+	pnlBandMembers.add(btnAddMember);
+	
+	btnRemoveMember=new JButton("Ta bort Bandmedlem");
+	btnRemoveMember.setPreferredSize(new Dimension(200,20));
+	btnRemoveMember.setBackground(Color.GRAY);
+	btnRemoveMember.addActionListener(new UpdateMemberListener());
+	pnlBandMembers.add(btnRemoveMember);
 	
 	JLabel lblTitle=new JLabel(bandname+": ");
-	lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
-	lblTitle.setHorizontalAlignment(JLabel.RIGHT);
+	lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 22));	
+	lblTitle.setHorizontalAlignment(JLabel.CENTER);
 	lblTitle.setForeground(Color.LIGHT_GRAY);
-	lblTitle.setPreferredSize(new Dimension(350,80));
+	lblTitle.setPreferredSize(new Dimension(700,30));
 	
 	pnlBandMembers.add(lblTitle);
 	
+	
+	
 	JLabel lblCountry=new JLabel("Land: Sverige");
-	lblCountry.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
+	lblCountry.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));	
 	lblCountry.setForeground(Color.LIGHT_GRAY);
-	lblCountry.setPreferredSize(new Dimension(290,40));
+	lblCountry.setHorizontalAlignment(JLabel.CENTER);
+	lblCountry.setPreferredSize(new Dimension(380,30));
 	
 	pnlBandMembers.add(lblCountry);
 	
 	JLabel lblGenre=new JLabel("Genre: Rock");
-	lblGenre.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
-	lblGenre.setHorizontalAlignment(JLabel.RIGHT);
+	lblGenre.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));	
+	lblGenre.setHorizontalAlignment(JLabel.CENTER);
 	lblGenre.setForeground(Color.LIGHT_GRAY);
-	lblGenre.setPreferredSize(new Dimension(200,40));
+	lblGenre.setPreferredSize(new Dimension(380,30));
 	
 	pnlBandMembers.add(lblGenre);
+	
+	
 	
 	ArrayList<JButton> btnMemberList=new ArrayList<>();
 	for(int i=0;i<10;i++){	//Kommer sedan bli bandlistans längd*
 		btnMemberList.add(new JButton("BandMedlem "+i));	//Band+i ==Databas-BandNamn
 		btnMemberList.get(i).setPreferredSize(new Dimension(500,30));
 		btnMemberList.get(i).setBackground(Color.GRAY);
+		btnMemberList.get(i).addActionListener(new UpdateMemberListener());
 		
 		pnlBandMembers.add(btnMemberList.get(i));
 	}
@@ -452,7 +475,8 @@ private class BandListener implements ActionListener{
 			JOptionPane.showMessageDialog(null,"Band Tillagt.");
 		}
 		if(e.getSource()==btnRemoveBand){
-			JOptionPane.showMessageDialog(null,"Band Borttaget.");
+			removeBand=true;
+			JOptionPane.showMessageDialog(null,"Tryck på det band som ska tas bort.");
 		}
 		
 	}
@@ -463,6 +487,10 @@ private class ScheduleListener implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if(removeTime){
+			removeTime=false;
+			JOptionPane.showMessageDialog(null,"Speltid Raderad.");
+		}
 		if(e.getSource()==btnSchedule){
 			clearPanel(pnlMain);
 			
@@ -511,7 +539,8 @@ private class ScheduleListener implements ActionListener{
 			}
 			if(e.getSource()==btnRemoveTime){
 				//KALLA PÅ QUESTIONCONTROLLER, visa i JOP?
-				JOptionPane.showMessageDialog(null, "Speltid Borttagen.");
+				removeTime=true;
+				JOptionPane.showMessageDialog(null, "Tryck på den Speltid som ska raderas.");
 			}
 			
 		}
@@ -522,6 +551,10 @@ private class ContactListener implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if(removeContact){
+			removeContact=false;	//Uppdatera listor o databas
+			JOptionPane.showMessageDialog(null, "Kontaktperson raderad.");
+		}
 		if(e.getSource()==btnContact){
 			clearPanel(pnlMain);
 			
@@ -535,7 +568,8 @@ private class ContactListener implements ActionListener{
 			JOptionPane.showMessageDialog(null, "Kontaktperson Tillagd.");
 		}
 		if(e.getSource()==btnRemoveContact){
-			JOptionPane.showMessageDialog(null, "Kontaktperson borttagen.");
+			removeContact=true;
+			JOptionPane.showMessageDialog(null, "Tryck på den Kontaktperson som ska bort.");
 		}
 		if(e.getSource()==btnAddBandContact){
 			JOptionPane.showMessageDialog(null, "Bandkontakt tillagd.");
@@ -548,6 +582,10 @@ private class SecurityListener implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if(removeSecurity){
+			removeSecurity=false;	//Uppdatera listor o databas
+			JOptionPane.showMessageDialog(null, "Säkerhetsansvarig raderad.");
+		}
 		if(e.getSource()==btnSecurity){
 			clearPanel(pnlMain);
 			
@@ -561,11 +599,13 @@ private class SecurityListener implements ActionListener{
 			JOptionPane.showMessageDialog(null, "Säkerhetsansvarig Tillagd.");
 		}
 		if(e.getSource()==btnRemoveSecurity){
-			JOptionPane.showMessageDialog(null, "Säkerhetsansvarig borttagen.");
+			removeSecurity=true;
+			JOptionPane.showMessageDialog(null, "Tryck på den säkerhetsanvarig som ska bort.");
 		}
 		if(e.getSource()==btnAddStageSecurity){
 			JOptionPane.showMessageDialog(null, "Scenansvarig Tillagd.");
 		}
+		
 	}
 	
 }
@@ -589,7 +629,11 @@ private class MemberListener implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+		if(removeBand){
+			removeBand=false;
+			//Tillkalla radera från databas, uppdatera panel och bandlista.
+			JOptionPane.showMessageDialog(null, "Band raderat.");
+		}else{
 			clearPanel(pnlMain);	
 			pnlMain.add(showBandMembers("Valt Band"));
 			pnlMain.revalidate();
@@ -597,7 +641,35 @@ private class MemberListener implements ActionListener{
 			//Hämta information från databas.
 			//Ta bort /Disable förra panelen.
 		
+		}
+	}
+	
+}
+private class UpdateMemberListener implements ActionListener{
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(removeMember){
+			//Ta bort knapp
+			//Uppdatera lista
+			removeMember=false;
+			JOptionPane.showMessageDialog(null, "Medlem raderad.");
+		}
+		if(e.getSource()==btnAddMember){
+			JOptionPane.showMessageDialog(null,"Medlem Tillagd.");
+			
+			//Hämta information från databas.
+			
 		
+		}
+		if(e.getSource()==btnRemoveMember){
+			removeMember=true;
+			JOptionPane.showMessageDialog(null,"Tryck på den medlem som ska tas bort");
+			
+			//Hämta information från databas.
+			
+		
+		}
 	}
 	
 }
