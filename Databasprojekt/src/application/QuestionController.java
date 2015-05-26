@@ -17,12 +17,21 @@ public class QuestionController {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             System.out.println("driver true");
-            con = (com.mysql.jdbc.Connection) DriverManager.getConnection("jdbc:mysql:///92.254.94.236:51515",
-                    "Andreas", "Andreas");
+            con = (com.mysql.jdbc.Connection) DriverManager.getConnection("jdbc:mysql://94.254.94.236:51515/andreas&david",
+                    "Andreas", "jody");
             if (!con.isClosed()) {
                 System.out.println("Successfully connected to "
                         + "MySQL server using TCP/IP...");
             }
+            PreparedStatement statement = (PreparedStatement) con.prepareStatement("select BandNamn from band");
+    		
+    		ResultSet result = statement.executeQuery();
+    		
+    			result.next();
+    			System.out.println(result.getString(1));
+    			result.next();
+    			System.out.println(result.getString(1));
+    		
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Exception: " + e.getMessage());
@@ -36,10 +45,7 @@ public class QuestionController {
         }
     }
 		
-		
-		/**Connection con = (com.mysql.jdbc.Connection) DriverManager.getConnection("jdbc:mysql://:localhost:3306", "Andreas", "Andreas");
-		
-
+		/**
 		
 		PreparedStatement statement = (PreparedStatement) con.prepareStatement("select * from band");
 		
@@ -49,9 +55,14 @@ public class QuestionController {
 			System.out.println(result.getString(1));
 		}*/
 	
-	public static void main(String [] args) throws Exception{
+	public static void main(String [] args) {
 		QuestionController q = new QuestionController();
-		q.Connection();
+		try {
+			q.Connection();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
