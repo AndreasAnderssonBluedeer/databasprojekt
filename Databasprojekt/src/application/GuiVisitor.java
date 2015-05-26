@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -15,19 +16,25 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 
 
 
 public class GuiVisitor extends JPanel {
 	
-	private JButton btnSchedule,btnBand;
-	private JPanel pnlStart,pnlMain,pnlBands;
-	
+	private JButton btnSchedule,btnBand,btnThursday,btnFriday,btnSaturday;
+	private JPanel pnlStart,pnlMain,pnlBands,pnlSchedule,pnlThursday,pnlFriday,pnlSaturday;
+	private JLabel lblSchedule;
 	public GuiVisitor(){
 
 		pnlStart=showStartScreen();
 		pnlBands=showBands();
+		pnlSchedule=showSchedule();
+		pnlThursday=getDaySchedule("Torsdag");
+		pnlFriday=getDaySchedule("Fredag");
+		pnlSaturday=getDaySchedule("Lördag");
 		pnlMain=this;	
 		
 		pnlMain.add(pnlStart);
@@ -41,12 +48,12 @@ public class GuiVisitor extends JPanel {
 		btn.addActionListener(new HomeListener());
 		return btn;
 	}
-	public void clearPanel(){
-		pnlMain.removeAll();
-		repaintMenu();
+	public void clearPanel(JPanel pnl){
+		pnl.removeAll();
+		repaintMenu(pnl);
 	}
-	public void repaintMenu(){
-		pnlMain.repaint();
+	public void repaintMenu(JPanel pnl){
+		pnl.repaint();
 	}
 	public JPanel showStartScreen(){
 		JPanel pnlStart = new JPanel();
@@ -99,16 +106,106 @@ public class GuiVisitor extends JPanel {
 		
 		return pnlBand;
 	}
+	public JPanel showSchedule(){
+		JPanel pnlSchedule=new JPanel();
+		pnlSchedule.setBackground(Color.DARK_GRAY);
+		pnlSchedule.setPreferredSize(new Dimension(800,600));
+		
+		pnlSchedule.add(getHomeBtn());
+		
+		lblSchedule=new JLabel("Spelscheman:");
+		lblSchedule.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
+		lblSchedule.setHorizontalAlignment(JLabel.RIGHT);
+		lblSchedule.setForeground(Color.LIGHT_GRAY);
+		lblSchedule.setPreferredSize(new Dimension(450,80));
+		
+		pnlSchedule.add(lblSchedule);
+		
+		Dimension dim=new Dimension(200,60);
+		
+		btnThursday=new JButton("Torsdag");
+		btnThursday.setPreferredSize(dim);
+		btnThursday.setBackground(Color.GRAY);
+		btnThursday.addActionListener(new ScheduleListener());
+		pnlSchedule.add(btnThursday);
+		
+		btnFriday=new JButton("Fredag");
+		btnFriday.setPreferredSize(dim);
+		btnFriday.setBackground(Color.GRAY);
+		btnFriday.addActionListener(new ScheduleListener());
+		pnlSchedule.add(btnFriday);
+		
+		btnSaturday=new JButton("Lördag");
+		btnSaturday.setPreferredSize(dim);
+		btnSaturday.setBackground(Color.GRAY);
+		btnSaturday.addActionListener(new ScheduleListener());
+		pnlSchedule.add(btnSaturday);
+		
+		
+		return pnlSchedule;
+	}
+	public JPanel getDaySchedule(String day){
+		JPanel pnlCompleteDay=new JPanel();
+		pnlCompleteDay.setBackground(Color.DARK_GRAY);
+		
+		JPanel pnlDay=new JPanel();
+		pnlDay.setBackground(Color.DARK_GRAY);
+		pnlDay.setLayout(new GridLayout(0, 1));
+		pnlCompleteDay.add(pnlDay);
+		
+		int v=ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
+	    int h=ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER; 
+	    JScrollPane jsp=new JScrollPane(pnlDay,v,h);
+	    jsp.setPreferredSize(new Dimension(600,400));
+	    
+	    
+	    pnlCompleteDay.add(jsp);
+		
+		ArrayList<JButton> btnDayList=new ArrayList<>();
+		
+		if(day.equals("Torsdag")){	//Hämta databas info för specifik dag.
+			
+			for(int i=0;i<20;i++){	//Kommer sedan bli bandlistans längd*
+				btnDayList.add(new JButton("Torsdag StartTid:17.00 SlutTid:18.00 Band: "+i));	//Band+i ==Databas-BandNamn
+				btnDayList.get(i).setSize(new Dimension(400,35));
+				btnDayList.get(i).setBackground(Color.GRAY);
+				pnlDay.add(btnDayList.get(i));
+			}
+		}if(day.equals("Fredag")){
+			
+			for(int i=0;i<15;i++){	//Kommer sedan bli bandlistans längd*
+				btnDayList.add(new JButton("Fredag StartTid:17.00 SlutTid:18.00 Band: "+i));	//Band+i ==Databas-BandNamn
+				btnDayList.get(i).setSize(new Dimension(400,35));
+				btnDayList.get(i).setBackground(Color.GRAY);
+				pnlDay.add(btnDayList.get(i));
+			}
+		}if(day.equals("Lördag")){
+			
+			for(int i=0;i<40;i++){	//Kommer sedan bli bandlistans längd*
+				btnDayList.add(new JButton("Lördag StartTid:17.00 SlutTid:18.00 Band: "+i));	//Band+i ==Databas-BandNamn
+				btnDayList.get(i).setSize(new Dimension(400,35));
+				btnDayList.get(i).setBackground(Color.GRAY);
+				pnlDay.add(btnDayList.get(i));
+			}
+		}
+		
+		return pnlCompleteDay;
+	}
+	public void clearSchedule(){
+		pnlSchedule.remove(pnlFriday);
+		pnlSchedule.remove(pnlThursday);
+		pnlSchedule.remove(pnlSaturday);
+	}
 	private class BandListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource()==btnBand){		
-				clearPanel();
+				clearPanel(pnlMain);
 			
 				pnlMain.add(pnlBands);
 				pnlMain.revalidate();
-				repaintMenu();
+				repaintMenu(pnlMain);
 				//Hämta information från databas.		
 			}
 			
@@ -120,24 +217,62 @@ public class GuiVisitor extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource()==btnSchedule){
-				pnlStart.setBackground(Color.GREEN);
-				//Hämta o visa Spelschema JPanel.
-				//Hämta information från databas.
-				//Ta bort /Disable förra panelen.
+				clearPanel(pnlMain);
+				
+				pnlMain.add(pnlSchedule);
+				pnlMain.revalidate();
+			
+				
+				}
+				if(e.getSource()==btnThursday){
+					clearPanel(pnlMain);
+					clearSchedule();
+					
+					pnlMain.add(pnlSchedule);
+					lblSchedule.setText("Spelschema Torsdag:");
+					pnlSchedule.add(pnlThursday);
+					
+					pnlMain.revalidate();
+				
+				}
+				if(e.getSource()==btnFriday){
+
+					clearPanel(pnlMain);
+					clearSchedule();
+					pnlMain.add(pnlSchedule);
+					lblSchedule.setText("Spelschema Fredag:");
+					pnlSchedule.add(pnlFriday);
+					
+					pnlMain.revalidate();
+				
+				}
+				if(e.getSource()==btnSaturday){
+					
+					clearPanel(pnlMain);				
+					clearSchedule();
+					
+					pnlMain.add(pnlSchedule);
+					lblSchedule.setText("Spelschema Lördag:");
+					pnlSchedule.add(pnlSaturday);
+					
+					pnlMain.revalidate();
+				
+				}
+				
 			}
 			
 		}
 		
-	}
+	
 	private class HomeListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
-				clearPanel();	
+				clearPanel(pnlMain);	
 				pnlMain.add(pnlStart);
 				pnlMain.revalidate();
-				repaintMenu();
+				repaintMenu(pnlMain);
 				//Hämta information från databas.
 				//Ta bort /Disable förra panelen.
 			
