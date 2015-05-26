@@ -26,16 +26,20 @@ import javax.swing.ScrollPaneConstants;
 public class GuiStaff extends JPanel {
 
 	
+
 	private JButton btnSchedule,btnBand,btnContact,btnSecurity,btnHome,
 			btnThursday,btnFriday,btnSaturday,btnAddTime,btnRemoveTime,
 			btnRemoveBand,btnAddBand,btnAddContact,btnRemoveContact,btnAddBandContact
 			,btnAddSecurity,btnRemoveSecurity,btnAddStageSecurity;
+	
 	private JPanel pnlStart,pnlMain,pnlBandMenu,pnlContacts,pnlSecurity,
 				   pnlSchedule,pnlThursday,pnlFriday,pnlSaturday,pnlBandMembers;
 	
 	private JLabel lblSchedule;
 	
 	private String bandname;
+
+
 	
 	public GuiStaff(){	
 	
@@ -206,6 +210,7 @@ public JPanel showSchedule(){
 }
 
 public JPanel showBands(){
+
 		JPanel pnlBandMenu=new JPanel();
 		pnlBandMenu.setBackground(Color.DARK_GRAY);
 		pnlBandMenu.setPreferredSize(new Dimension(800,600));
@@ -255,21 +260,28 @@ public JPanel showBands(){
 		}
 		
 		return pnlBandMenu;
-	}
+
+	
+}
 public JPanel showContacts(){
 	JPanel pnlContact=new JPanel();
 	pnlContact.setBackground(Color.DARK_GRAY);
 	pnlContact.setPreferredSize(new Dimension(800,600));
 	
+	
+	
 	pnlContact.add(getHomeBtn());
+	
 	
 	JLabel lblTitle=new JLabel("Kontaktpersoner:");
 	lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
 	lblTitle.setHorizontalAlignment(JLabel.RIGHT);
 	lblTitle.setForeground(Color.LIGHT_GRAY);
 	lblTitle.setPreferredSize(new Dimension(450,80));
+
 	
 	pnlContact.add(lblTitle);
+
 	
 	Dimension dimBtn=new Dimension(200,40);
 	
@@ -321,15 +333,19 @@ public JPanel showSecurity(){
 	pnlSecurity.setPreferredSize(new Dimension(800,600));
 	
 	
+	
 	pnlSecurity.add(getHomeBtn());
+	
 	
 	JLabel lblTitle=new JLabel("Säkerhetsansvariga:");
 	lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
 	lblTitle.setHorizontalAlignment(JLabel.RIGHT);
 	lblTitle.setForeground(Color.LIGHT_GRAY);
-	lblTitle.setPreferredSize(new Dimension(550,80));
+	lblTitle.setPreferredSize(new Dimension(450,80));
+
 	
 	pnlSecurity.add(lblTitle);
+
 	
 	Dimension dimBtn=new Dimension(200,40);
 	
