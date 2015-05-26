@@ -25,8 +25,9 @@ import javax.swing.ScrollPaneConstants;
 public class GuiVisitor extends JPanel {
 	
 	private JButton btnSchedule,btnBand,btnThursday,btnFriday,btnSaturday;
-	private JPanel pnlStart,pnlMain,pnlBands,pnlSchedule,pnlThursday,pnlFriday,pnlSaturday;
+	private JPanel pnlStart,pnlMain,pnlBands,pnlSchedule,pnlThursday,pnlFriday,pnlSaturday,pnlBandMembers;
 	private JLabel lblSchedule;
+	private String bandname="Bandnamn:";
 	public GuiVisitor(){
 
 		pnlStart=showStartScreen();
@@ -82,29 +83,43 @@ public class GuiVisitor extends JPanel {
 		return pnlStart;
 	}
 	public JPanel showBands(){
-		JPanel pnlBand=new JPanel();
-		pnlBand.setBackground(Color.DARK_GRAY);
-		pnlBand.setPreferredSize(new Dimension(800,600));
+		JPanel pnlBandMenu=new JPanel();
+		pnlBandMenu.setBackground(Color.DARK_GRAY);
+		pnlBandMenu.setPreferredSize(new Dimension(800,600));
 		
-		pnlBand.add(getHomeBtn());
+		pnlBandMenu.add(getHomeBtn());
+		
+		JPanel pnlBands=new JPanel();
+		pnlBands.setBackground(Color.DARK_GRAY);
+		pnlBands.setLayout(new GridLayout(0, 3));
+		
 		
 		JLabel lblTitle=new JLabel("BAND:");
 		lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
 		lblTitle.setHorizontalAlignment(JLabel.RIGHT);
 		lblTitle.setForeground(Color.LIGHT_GRAY);
-		lblTitle.setPreferredSize(new Dimension(600,80));
+		lblTitle.setPreferredSize(new Dimension(550,80));
 		
-		pnlBand.add(lblTitle);
+		pnlBandMenu.add(lblTitle);
+		
+		int v=ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
+	    int h=ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER; 
+	    JScrollPane jsp=new JScrollPane(pnlBands,v,h);
+	    jsp.setPreferredSize(new Dimension(700,350));
+	    
+	    
+	    pnlBandMenu.add(jsp);
 		
 		ArrayList<JButton> btnBandList=new ArrayList<>();
-		for(int i=0;i<21;i++){	//Kommer sedan bli bandlistans längd*
+		for(int i=0;i<55;i++){	//Kommer sedan bli bandlistans längd*
 			btnBandList.add(new JButton("Band"+i));	//Band+i ==Databas-BandNamn
-			btnBandList.get(i).setPreferredSize(new Dimension(250,20));
+			btnBandList.get(i).setSize(new Dimension(250,30));
 			btnBandList.get(i).setBackground(Color.GRAY);
-			pnlBand.add(btnBandList.get(i));
+			btnBandList.get(i).addActionListener(new MemberListener());
+			pnlBands.add(btnBandList.get(i));
 		}
 		
-		return pnlBand;
+		return pnlBandMenu;
 	}
 	public JPanel showSchedule(){
 		JPanel pnlSchedule=new JPanel();
@@ -141,7 +156,6 @@ public class GuiVisitor extends JPanel {
 		btnSaturday.addActionListener(new ScheduleListener());
 		pnlSchedule.add(btnSaturday);
 		
-		
 		return pnlSchedule;
 	}
 	public JPanel getDaySchedule(String day){
@@ -156,7 +170,7 @@ public class GuiVisitor extends JPanel {
 		int v=ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 	    int h=ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER; 
 	    JScrollPane jsp=new JScrollPane(pnlDay,v,h);
-	    jsp.setPreferredSize(new Dimension(600,400));
+	    jsp.setPreferredSize(new Dimension(600,350));
 	    
 	    
 	    pnlCompleteDay.add(jsp);
@@ -191,12 +205,55 @@ public class GuiVisitor extends JPanel {
 		
 		return pnlCompleteDay;
 	}
-	public void clearSchedule(){
+	public JPanel showBandMembers(String name){
+		this.bandname=name;
+		pnlBandMembers=new JPanel();
+		pnlBandMembers.setBackground(Color.DARK_GRAY);
+		pnlBandMembers.setPreferredSize(new Dimension(800,600));
+		
+		pnlBandMembers.add(getHomeBtn());
+		
+		JLabel lblTitle=new JLabel(bandname+": ");
+		lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
+		lblTitle.setHorizontalAlignment(JLabel.RIGHT);
+		lblTitle.setForeground(Color.LIGHT_GRAY);
+		lblTitle.setPreferredSize(new Dimension(350,80));
+		
+		pnlBandMembers.add(lblTitle);
+		
+		JLabel lblCountry=new JLabel("Land: Sverige");
+		lblCountry.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
+		lblCountry.setForeground(Color.LIGHT_GRAY);
+		lblCountry.setPreferredSize(new Dimension(290,40));
+		
+		pnlBandMembers.add(lblCountry);
+		
+		JLabel lblGenre=new JLabel("Genre: Rock");
+		lblGenre.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
+		lblGenre.setHorizontalAlignment(JLabel.RIGHT);
+		lblGenre.setForeground(Color.LIGHT_GRAY);
+		lblGenre.setPreferredSize(new Dimension(200,40));
+		
+		pnlBandMembers.add(lblGenre);
+		
+		ArrayList<JButton> btnMemberList=new ArrayList<>();
+		for(int i=0;i<10;i++){	//Kommer sedan bli bandlistans längd*
+			btnMemberList.add(new JButton("BandMedlem "+i));	//Band+i ==Databas-BandNamn
+			btnMemberList.get(i).setPreferredSize(new Dimension(500,30));
+			btnMemberList.get(i).setBackground(Color.GRAY);
+			
+			pnlBandMembers.add(btnMemberList.get(i));
+		}
+		
+		return pnlBandMembers;
+	}
+public void clearSchedule(){
 		pnlSchedule.remove(pnlFriday);
 		pnlSchedule.remove(pnlThursday);
 		pnlSchedule.remove(pnlSaturday);
 	}
-	private class BandListener implements ActionListener{
+	
+private class BandListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -273,6 +330,22 @@ public class GuiVisitor extends JPanel {
 				pnlMain.add(pnlStart);
 				pnlMain.revalidate();
 				repaintMenu(pnlMain);
+				//Hämta information från databas.
+				//Ta bort /Disable förra panelen.
+			
+			
+		}
+		
+	}
+	private class MemberListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+				clearPanel(pnlMain);	
+				pnlMain.add(showBandMembers("Valt Band"));
+				pnlMain.revalidate();
+				
 				//Hämta information från databas.
 				//Ta bort /Disable förra panelen.
 			
