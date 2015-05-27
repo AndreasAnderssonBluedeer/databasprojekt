@@ -22,12 +22,23 @@ import javax.swing.ScrollPaneConstants;
 
 
 
+
+
 public class GuiVisitor extends JPanel {
+	
+	private ArrayList<JButton> btnBandList,btnMemberList,btnSecurityList,btnContactList,btnDayList;
+	private GetInfo info = new GetInfo();
+	
+	private ArrayList<String> bands = new ArrayList <>();
+	private ArrayList<String> schedule = new ArrayList <>();
+	private ArrayList<String> members = new ArrayList <>();
 	
 	private JButton btnSchedule,btnBand,btnThursday,btnFriday,btnSaturday;
 	private JPanel pnlStart,pnlMain,pnlBands,pnlSchedule,pnlThursday,pnlFriday,pnlSaturday,pnlBandMembers;
 	private JLabel lblSchedule;
 	private String bandname="Bandnamn:";
+	private String strBand,strMember,strTime,strDay;
+	
 	public GuiVisitor(){
 
 		pnlStart=showStartScreen();
@@ -86,7 +97,11 @@ public class GuiVisitor extends JPanel {
 		JPanel pnlBandMenu=new JPanel();
 		pnlBandMenu.setBackground(Color.DARK_GRAY);
 		pnlBandMenu.setPreferredSize(new Dimension(800,600));
-		
+		try {
+			bands=info.getBands();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		pnlBandMenu.add(getHomeBtn());
 		
 		JPanel pnlBands=new JPanel();
@@ -110,9 +125,9 @@ public class GuiVisitor extends JPanel {
 	    
 	    pnlBandMenu.add(jsp);
 		
-		ArrayList<JButton> btnBandList=new ArrayList<>();
-		for(int i=0;i<55;i++){	//Kommer sedan bli bandlistans längd*
-			btnBandList.add(new JButton("Band"+i));	//Band+i ==Databas-BandNamn
+		btnBandList=new ArrayList<>();
+		for(int i=0;i<bands.size();i++){	//Kommer sedan bli bandlistans längd*
+			btnBandList.add(new JButton(bands.get(i)));	//Band+i ==Databas-BandNamn
 			btnBandList.get(i).setSize(new Dimension(250,30));
 			btnBandList.get(i).setBackground(Color.GRAY);
 			btnBandList.get(i).addActionListener(new MemberListener());
@@ -162,6 +177,8 @@ public class GuiVisitor extends JPanel {
 		JPanel pnlCompleteDay=new JPanel();
 		pnlCompleteDay.setBackground(Color.DARK_GRAY);
 		
+		schedule=info.getSchedule(day);
+				
 		JPanel pnlDay=new JPanel();
 		pnlDay.setBackground(Color.DARK_GRAY);
 		pnlDay.setLayout(new GridLayout(0, 1));
@@ -175,33 +192,17 @@ public class GuiVisitor extends JPanel {
 	    
 	    pnlCompleteDay.add(jsp);
 		
-		ArrayList<JButton> btnDayList=new ArrayList<>();
+		btnDayList=new ArrayList<>();
 		
-		if(day.equals("Torsdag")){	//Hämta databas info för specifik dag.
+		
 			
-			for(int i=0;i<20;i++){	//Kommer sedan bli bandlistans längd*
-				btnDayList.add(new JButton("Torsdag StartTid:17.00 SlutTid:18.00 Band: "+i));	//Band+i ==Databas-BandNamn
-				btnDayList.get(i).setSize(new Dimension(400,35));
+			for(int i=0;i<schedule.size();i++){	//Kommer sedan bli bandlistans längd*
+				btnDayList.add(new JButton(schedule.get(i)));	//Band+i ==Databas-BandNamn
+				btnDayList.get(i).setPreferredSize(new Dimension(400,35));
 				btnDayList.get(i).setBackground(Color.GRAY);
+				btnDayList.get(i).addActionListener(new ScheduleListener());
 				pnlDay.add(btnDayList.get(i));
 			}
-		}if(day.equals("Fredag")){
-			
-			for(int i=0;i<15;i++){	//Kommer sedan bli bandlistans längd*
-				btnDayList.add(new JButton("Fredag StartTid:17.00 SlutTid:18.00 Band: "+i));	//Band+i ==Databas-BandNamn
-				btnDayList.get(i).setSize(new Dimension(400,35));
-				btnDayList.get(i).setBackground(Color.GRAY);
-				pnlDay.add(btnDayList.get(i));
-			}
-		}if(day.equals("Lördag")){
-			
-			for(int i=0;i<40;i++){	//Kommer sedan bli bandlistans längd*
-				btnDayList.add(new JButton("Lördag StartTid:17.00 SlutTid:18.00 Band: "+i));	//Band+i ==Databas-BandNamn
-				btnDayList.get(i).setSize(new Dimension(400,35));
-				btnDayList.get(i).setBackground(Color.GRAY);
-				pnlDay.add(btnDayList.get(i));
-			}
-		}
 		
 		return pnlCompleteDay;
 	}
@@ -213,34 +214,23 @@ public class GuiVisitor extends JPanel {
 		
 		pnlBandMembers.add(getHomeBtn());
 		
-		JLabel lblTitle=new JLabel(bandname+": ");
-		lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
-		lblTitle.setHorizontalAlignment(JLabel.RIGHT);
+		JLabel lblTitle=new JLabel(info.getBandInfo(bandname));
+		lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));	
+		lblTitle.setHorizontalAlignment(JLabel.CENTER);
 		lblTitle.setForeground(Color.LIGHT_GRAY);
-		lblTitle.setPreferredSize(new Dimension(350,80));
+		lblTitle.setPreferredSize(new Dimension(800,40));
 		
 		pnlBandMembers.add(lblTitle);
 		
-		JLabel lblCountry=new JLabel("Land: Sverige");
-		lblCountry.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
-		lblCountry.setForeground(Color.LIGHT_GRAY);
-		lblCountry.setPreferredSize(new Dimension(290,40));
 		
-		pnlBandMembers.add(lblCountry);
+		members=info.getMembers(bandname);
 		
-		JLabel lblGenre=new JLabel("Genre: Rock");
-		lblGenre.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
-		lblGenre.setHorizontalAlignment(JLabel.RIGHT);
-		lblGenre.setForeground(Color.LIGHT_GRAY);
-		lblGenre.setPreferredSize(new Dimension(200,40));
-		
-		pnlBandMembers.add(lblGenre);
-		
-		ArrayList<JButton> btnMemberList=new ArrayList<>();
-		for(int i=0;i<10;i++){	//Kommer sedan bli bandlistans längd*
-			btnMemberList.add(new JButton("BandMedlem "+i));	//Band+i ==Databas-BandNamn
-			btnMemberList.get(i).setPreferredSize(new Dimension(500,30));
+		btnMemberList=new ArrayList<>();
+		for(int i=0;i<members.size();i++){	//Kommer sedan bli bandlistans längd*
+			btnMemberList.add(new JButton(members.get(i)));	//Band+i ==Databas-BandNamn
+			btnMemberList.get(i).setPreferredSize(new Dimension(700,60));
 			btnMemberList.get(i).setBackground(Color.GRAY);
+			btnMemberList.get(i).setHorizontalAlignment(JLabel.LEFT);
 			
 			pnlBandMembers.add(btnMemberList.get(i));
 		}
@@ -341,9 +331,14 @@ private class BandListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			strBand="Valt Band";
+			for(int i=0;i<btnBandList.size();i++){
+				if(btnBandList.get(i)==e.getSource()){
+					strBand=btnBandList.get(i).getText();
+				}
+			}
 				clearPanel(pnlMain);	
-				pnlMain.add(showBandMembers("Valt Band"));
+				pnlMain.add(showBandMembers(strBand));
 				pnlMain.revalidate();
 				
 				//Hämta information från databas.

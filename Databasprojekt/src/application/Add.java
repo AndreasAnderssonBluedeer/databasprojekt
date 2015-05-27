@@ -69,12 +69,14 @@ public class Add {
 
 			ResultSet result4 = statement4.executeQuery();
 			while(result4.next()){		
-			System.out.println(result4.getString(1)+" "+result4.getString(2));
-			
-			}} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,"Hoppsan,något gick snett. Testa igen!");
+			System.out.println(result4.getString(1)+" "+result4.getString(2));			
+			}
+			JOptionPane.showMessageDialog(null, bandname+" Tillagt.");
+			} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,"Hoppsan,något gick snett.Finns bandet redan? Testa igen!");
 			e.printStackTrace();
 		}
+		
 		
 	}
 	public void addContact(){
@@ -97,7 +99,7 @@ public class Add {
 			System.out.println(result4.getString(1)+" "+result4.getString(2));
 			
 			}} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,"Hoppsan,något gick snett. Testa igen!");
+			JOptionPane.showMessageDialog(null,"Hoppsan,något gick snett. Finns id.t redan? Testa igen!");
 			e.printStackTrace();
 		}
 	}
@@ -120,10 +122,10 @@ public class Add {
 
 			ResultSet result4 = statement4.executeQuery();
 			while(result4.next()){		
-			System.out.println(result4.getString(1)+" "+result4.getString(2));
-			
-			}} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,"Hoppsan,något gick snett. Testa igen!");
+			System.out.println(result4.getString(1)+" "+result4.getString(2));			
+			}
+			JOptionPane.showMessageDialog(null,"Medlem Tillagd.");} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,"Hoppsan,något gick snett. Finns id:t redan? Testa igen!");
 			e.printStackTrace();
 		}
 	}
@@ -175,8 +177,10 @@ public class Add {
 			while(result4.next()){		
 			System.out.println(result4.getString(1)+" "+result4.getString(2));
 			
-			}} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,"Hoppsan,något gick snett. Testa igen!");
+			}
+			JOptionPane.showMessageDialog(null, "Säkerhetsansvarig Tillagd.");
+			} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,"Hoppsan,något gick snett. Finns Id:t redan? Testa igen!");
 			e.printStackTrace();
 		}
 	}

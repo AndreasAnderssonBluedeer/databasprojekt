@@ -10,7 +10,15 @@ import com.mysql.jdbc.Connection;
 
 public class Remove {
 	private Connection con;
-	public void Connection() throws Exception {
+	public Remove(){
+		try {
+			connection();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void connection() throws Exception {
 		Class.forName("com.mysql.jdbc.Driver");
 		con = null;
 		try {
@@ -106,10 +114,12 @@ public class Remove {
 
 			ResultSet result4 = statement4.executeQuery();
 			while(result4.next()){		
-			System.out.println(result4.getString(1)+" "+result4.getString(2));
-			
-			}} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,"Hoppsan,något gick snett. Testa igen!");
+			System.out.println(result4.getString(1)+" "+result4.getString(2));		
+			}
+			JOptionPane.showMessageDialog(null, "Kontaktperson med id"+id+" är raderad.");
+			} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,"Hoppsan,något gick snett. Är Kontaktpersonen"
+					+ " knuten till ett band? Testa igen!");
 			e.printStackTrace();
 		}
 	}
@@ -127,10 +137,12 @@ public class Remove {
 
 			ResultSet result4 = statement4.executeQuery();
 			while(result4.next()){		
-			System.out.println(result4.getString(1)+" "+result4.getString(2));
-			
-			}} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,"Hoppsan,något gick snett. Testa igen!");
+			System.out.println(result4.getString(1)+" "+result4.getString(2));			
+			}
+			JOptionPane.showMessageDialog(null, "Säkerhetsansvarig raderad.");
+			} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,"Hoppsan,något gick snett. Är Säkerhetsansvarig anmäld till en speltid?"
+					+ " Testa igen!");
 			e.printStackTrace();
 		}
 	}
@@ -159,7 +171,7 @@ public class Remove {
 	public static void main(String[] args) {
 		Remove q = new Remove();
 		try {
-			q.Connection();
+			q.connection();
 			q.removeBand("Sillarna");
 			q.removeAct("Magestic", "17.45","Fredag");
 			q.removeContact("19901212-1212");
