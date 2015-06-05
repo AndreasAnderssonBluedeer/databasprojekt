@@ -98,7 +98,7 @@ public class Add {
 	}
 	public void addContact(){
 		PreparedStatement statement1;
-		String name,id;
+		String name;
 		name=JOptionPane.showInputDialog("Skriv in Kontaktpersonens namn.");
 		try {
 			statement1 = (PreparedStatement) con
@@ -119,6 +119,56 @@ public class Add {
 			e.printStackTrace();
 		}
 	}
+	public void addStage(){
+		PreparedStatement statement1;
+		String name;
+		name=JOptionPane.showInputDialog("Skriv in Scenens namn.");
+		int nbr=Integer.parseInt(JOptionPane.showInputDialog("Skriv in Publik Antal (Siffror)."));
+		try {
+			statement1 = (PreparedStatement) con
+					.prepareStatement("INSERT INTO scen(Scennamn,Publik_Antal)"
+							+ "Values ('"+name+"','"+nbr+"')");
+			statement1.execute();
+			
+			} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,"Hoppsan,något gick snett. Finns id.t redan? Testa igen!");
+			e.printStackTrace();
+		}
+	}
+	public void changeBandContact(String bandid){
+		ArrayList<String> arr=info.getContacts();
+		String [] str= new String[arr.size()];
+		for(int i=0;i<str.length;i++){
+			str[i]=arr.get(i);
+		}
+		JFrame frame = new JFrame("Välj en ny Kontakt.");
+		String contactID= (String) JOptionPane.showInputDialog(frame, 
+		        "Välj en ny kontaktperson",
+		        "Välj en ny Kontakt.",
+		        JOptionPane.QUESTION_MESSAGE, 
+		        null, 
+		        str, 
+		        str[0]);
+		
+			String [] parts=contactID.split(",");
+			contactID=parts[0];
+			
+		PreparedStatement statement1;
+	
+		
+		try {
+			statement1 = (PreparedStatement) con
+					.prepareStatement("UPDATE band "
+							+ "SET Kontakt='"+contactID+"' "
+							+ "WHERE Bandnamn='"+bandid+"'");
+			statement1.execute();			
+			} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,"Hoppsan,något gick snett.Testa igen!");
+			e.printStackTrace();
+		}		
+		
+	}
+	
 	public void addMember(String band){
 		PreparedStatement statement1,statement;
 		String name,id,information;

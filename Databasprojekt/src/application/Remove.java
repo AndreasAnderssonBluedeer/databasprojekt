@@ -100,6 +100,20 @@ public class Remove {
 			e.printStackTrace();
 		}
 	}
+	public void removeStage(String stageID){		
+		PreparedStatement statement1;
+		
+		try {
+			statement1 = (PreparedStatement) con
+					.prepareStatement("delete from scen where ScenID='"+stageID+"'");
+			statement1.execute();
+			
+			JOptionPane.showMessageDialog(null, "Scen raderad.");
+			} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,"Hoppsan,något gick snett. Är Scenen bokad? Testa igen!");
+			e.printStackTrace();
+		}
+	}
 	public void removeContact(String id){
 		PreparedStatement statement1;
 		

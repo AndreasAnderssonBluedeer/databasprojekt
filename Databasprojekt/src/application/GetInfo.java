@@ -207,6 +207,30 @@ public class GetInfo {
     	return arr;
     	
     } 
+    public ArrayList<String> getStageList() {
+        ArrayList<String>stages = new ArrayList<>();
+    		PreparedStatement statement;
+    		try {
+    			statement = (PreparedStatement) con.prepareStatement("select * from scen");
+    		
+    		
+    		ResultSet result = statement.executeQuery();
+    		
+    		while(result.next()){
+    			stages.add(result.getString(3)+", "+result.getString(1)+", Publikgräns: "+result.getString(2));
+    			
+    		}
+    		} catch (SQLException e) {
+    			JOptionPane.showMessageDialog(null, "Kunde inte hämta info från Databasen!");
+    			e.printStackTrace();
+    		}
+    		
+    		
+    		
+    		
+        	return stages;
+        	
+        } 
     public ArrayList<String> getSecurity() {
     	security = new ArrayList<>();
 		PreparedStatement statement;

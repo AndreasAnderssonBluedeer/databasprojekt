@@ -24,13 +24,14 @@ import javax.swing.ScrollPaneConstants;
 
 
 public class GuiStaff extends JPanel {
-	private ArrayList<JButton> btnBandList,btnMemberList,btnSecurityList,btnContactList,btnDayList;
+	private ArrayList<JButton> btnBandList,btnMemberList,btnSecurityList,btnContactList,btnDayList,btnStageList;
 	private GetInfo info = new GetInfo();
 	private Remove remove=new Remove();
 	private Add add=new Add();
 	
 	private ArrayList<String> bands = new ArrayList <>();
 	private ArrayList<String> contacts = new ArrayList <>();
+	private ArrayList<String> stages = new ArrayList <>();
 	private ArrayList<String> security = new ArrayList <>();
 	private ArrayList<String> schedule = new ArrayList <>();
 	private ArrayList<String> members = new ArrayList <>();
@@ -38,16 +39,17 @@ public class GuiStaff extends JPanel {
 	private JButton btnSchedule,btnBand,btnContact,btnSecurity,btnHome,
 			btnThursday,btnFriday,btnSaturday,btnAddTime,btnRemoveTime,
 			btnRemoveBand,btnAddBand,btnAddContact,btnRemoveContact,btnAddBandContact
-			,btnAddSecurity,btnRemoveSecurity,btnAddStageSecurity,btnAddMember,btnRemoveMember;
+			,btnAddSecurity,btnRemoveSecurity,btnAddStageSecurity,btnAddMember,btnRemoveMember,
+			btnUpdateBandContact,btnStage,btnAddStage,btnRemoveStage;
 	
 	private JPanel pnlStart,pnlMain,pnlBandMenu,pnlContacts,pnlSecurity,
-				   pnlSchedule,pnlThursday,pnlFriday,pnlSaturday,pnlBandMembers;
+				   pnlSchedule,pnlThursday,pnlFriday,pnlSaturday,pnlBandMembers,pnlStages;
 	
 	private JLabel lblSchedule;
 	
-	private String bandname,strBand,strMember,strContact,strSecurity,strTime,strDay,strBandID;
+	private String bandname,strBand,strMember,strContact,strSecurity,strTime,strDay,strBandID,strStage;
 
-	private boolean removeTime,removeBand,removeMember,removeContact,removeSecurity;
+	private boolean removeTime,removeBand,removeMember,removeContact,removeSecurity,removeStage;
 
 	
 	public GuiStaff(){	
@@ -60,6 +62,7 @@ public class GuiStaff extends JPanel {
 		pnlThursday=getDaySchedule("Torsdag");
 		pnlFriday=getDaySchedule("Fredag");
 		pnlSaturday=getDaySchedule("Lördag");
+		pnlStages=showStages();
 		pnlMain=this;	
 		
 		pnlMain.add(pnlStart);
@@ -142,6 +145,11 @@ public JPanel showStartScreen(){
 	btnSecurity.setBackground(Color.GRAY);
 	btnSecurity.addActionListener(new SecurityListener());
 	
+	btnStage=new JButton("Scener");
+	btnStage.setPreferredSize(new Dimension(300,60));
+	btnStage.setBackground(Color.GRAY);
+	btnStage.addActionListener(new StageListener());
+	
 	
 	
 	pnlStart.add(emptyStart);
@@ -149,6 +157,7 @@ public JPanel showStartScreen(){
 	pnlStart.add(btnSecurity);	
 	pnlStart.add(btnSchedule);
 	pnlStart.add(btnBand);
+	pnlStart.add(btnStage);
 		
 	
 	return pnlStart;
@@ -393,11 +402,19 @@ public JPanel showBandMembers(String name){
 	btnAddMember.addActionListener(new UpdateMemberListener());
 	pnlBandMembers.add(btnAddMember);
 	
+	
+	
 	btnRemoveMember=new JButton("Ta bort Bandmedlem");
 	btnRemoveMember.setPreferredSize(new Dimension(200,20));
 	btnRemoveMember.setBackground(Color.GRAY);
 	btnRemoveMember.addActionListener(new UpdateMemberListener());
 	pnlBandMembers.add(btnRemoveMember);
+	
+	btnUpdateBandContact=new JButton("Ändra Bandkontakt");
+	btnUpdateBandContact.setPreferredSize(new Dimension(200,20));
+	btnUpdateBandContact.setBackground(Color.GRAY);
+	btnUpdateBandContact.addActionListener(new UpdateMemberListener());
+	pnlBandMembers.add(btnUpdateBandContact);
 	
 	JLabel lblTitle=new JLabel(info.getBandInfo(strBand));
 	lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));	
@@ -419,6 +436,62 @@ public JPanel showBandMembers(String name){
 	}
 	
 	return pnlBandMembers;
+}
+
+public JPanel showStages(){
+	JPanel pnlStage=new JPanel();
+	pnlStage.setBackground(Color.DARK_GRAY);
+	pnlStage.setPreferredSize(new Dimension(800,600));
+	
+	stages=info.getStageList();
+	
+	pnlStage.add(getHomeBtn());
+	
+	
+	JLabel lblTitle=new JLabel("Scener:");
+	lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
+	lblTitle.setHorizontalAlignment(JLabel.RIGHT);
+	lblTitle.setForeground(Color.LIGHT_GRAY);
+	lblTitle.setPreferredSize(new Dimension(450,80));
+
+	
+	pnlStage.add(lblTitle);
+
+	
+	Dimension dimBtn=new Dimension(300,40);
+	
+	btnAddStage=new JButton("Lägg till Scen");
+	btnAddStage.setPreferredSize(dimBtn);
+	btnAddStage.setBackground(Color.GRAY);
+	btnAddStage.addActionListener(new StageListener());
+	pnlStage.add(btnAddStage);
+	
+	btnRemoveStage=new JButton("Ta bort Scen");
+	btnRemoveStage.setPreferredSize(dimBtn);
+	btnRemoveStage.setBackground(Color.GRAY);
+	btnRemoveStage.addActionListener(new StageListener());
+	pnlStage.add(btnRemoveStage);
+	
+	JPanel pnl=new JPanel();
+	pnl.setBackground(Color.DARK_GRAY);
+	pnl.setLayout(new GridLayout(0, 1));
+	
+	int v=ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
+    int h=ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER; 
+    JScrollPane jsp=new JScrollPane(pnl,v,h);
+    jsp.setPreferredSize(new Dimension(600,350));
+	
+	btnStageList=new ArrayList<>();
+	for(int i=0;i<stages.size();i++){	//Kommer sedan bli Kontaktlistans längd*
+		btnStageList.add(new JButton(stages.get(i)));
+		btnStageList.get(i).setSize(new Dimension(600,30));
+		btnStageList.get(i).setBackground(Color.GRAY);
+		btnStageList.get(i).addActionListener(new StageListener());
+		pnl.add(btnStageList.get(i));
+	}
+	pnlStage.add(jsp);
+	
+	return pnlStage;
 }
 
 public void clearSchedule(){
@@ -721,7 +794,12 @@ private class UpdateMemberListener implements ActionListener{
 			clearPanel(pnlMain);	
 			pnlMain.add(showBandMembers(strBand));
 			pnlMain.revalidate();
-		
+		}
+		if(e.getSource()==btnUpdateBandContact){
+			add.changeBandContact(strBand);
+			clearPanel(pnlMain);	
+			pnlMain.add(showBandMembers(strBand));
+			pnlMain.revalidate();
 		}
 		if(e.getSource()==btnRemoveMember){
 			removeMember=true;
@@ -735,8 +813,44 @@ private class UpdateMemberListener implements ActionListener{
 	
 }
 
+private class StageListener implements ActionListener{
 
 
+@Override
+public void actionPerformed(ActionEvent e) {
+	strStage="Vald Scen";
+	for(int i=0;i<btnStageList.size();i++){
+		if(btnStageList.get(i)==e.getSource()){
+			strStage=btnStageList.get(i).getText();
+		}
+	}
+	if(removeStage){
+		removeStage=false;	//Uppdatera listor o databas
+		
+		String[] parts = strStage.split(",");
+		String strStage = parts[0];		
+		remove.removeStage(strStage);	
+		pnlStages=showStages();
+		btnStage.doClick();
+	}
+	if(e.getSource()==btnStage){
+		clearPanel(pnlMain);
+		
+		pnlMain.add(pnlStages);
+		pnlMain.revalidate();
+	}
+	if(e.getSource()==btnAddStage){
+		add.addStage();
+		pnlStages=showStages();
+		btnStage.doClick();
+	}
+	if(e.getSource()==btnRemoveStage){
+		removeStage=true;
+		JOptionPane.showMessageDialog(null, "Tryck på den Scen som ska bort.");
+	}
+	
+}
+}
 public static void main(String [] args){
 	JFrame f= new JFrame("Festivalinfo-Personal");
 	f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -746,9 +860,9 @@ public static void main(String [] args){
 	f.setVisible(true);
 	f.setResizable(false);
 	
+}	
 	
-	
-}
+
 
 
 
