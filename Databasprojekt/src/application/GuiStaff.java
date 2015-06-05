@@ -45,7 +45,7 @@ public class GuiStaff extends JPanel {
 	
 	private JLabel lblSchedule;
 	
-	private String bandname,strBand,strMember,strContact,strSecurity,strTime,strDay;
+	private String bandname,strBand,strMember,strContact,strSecurity,strTime,strDay,strBandID;
 
 	private boolean removeTime,removeBand,removeMember,removeContact,removeSecurity;
 
@@ -93,7 +93,7 @@ public class GuiStaff extends JPanel {
 		int v=ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 	    int h=ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER; 
 	    JScrollPane jsp=new JScrollPane(pnlDay,v,h);
-	    jsp.setPreferredSize(new Dimension(600,350));
+	    jsp.setPreferredSize(new Dimension(700,350));
 	    
 	    
 	    pnlCompleteDay.add(jsp);
@@ -102,9 +102,9 @@ public class GuiStaff extends JPanel {
 		
 		
 			
-			for(int i=0;i<schedule.size();i++){	//Kommer sedan bli bandlistans längd*
-				btnDayList.add(new JButton(schedule.get(i)));	//Band+i ==Databas-BandNamn
-				btnDayList.get(i).setPreferredSize(new Dimension(400,35));
+			for(int i=0;i<schedule.size();i++){	
+				btnDayList.add(new JButton(schedule.get(i)));
+				btnDayList.get(i).setPreferredSize(new Dimension(600,35));
 				btnDayList.get(i).setBackground(Color.GRAY);
 				btnDayList.get(i).addActionListener(new ScheduleListener());
 				pnlDay.add(btnDayList.get(i));
@@ -400,10 +400,10 @@ public JPanel showBandMembers(String name){
 	pnlBandMembers.add(btnRemoveMember);
 	
 	JLabel lblTitle=new JLabel(info.getBandInfo(strBand));
-	lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));	
+	lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));	
 	lblTitle.setHorizontalAlignment(JLabel.CENTER);
 	lblTitle.setForeground(Color.LIGHT_GRAY);
-	lblTitle.setPreferredSize(new Dimension(800,30));
+	lblTitle.setPreferredSize(new Dimension(800,50));
 	
 	pnlBandMembers.add(lblTitle);
 	
@@ -471,16 +471,17 @@ private class ScheduleListener implements ActionListener{
 		if(removeTime){
 			removeTime=false;
 			
-			String[] parts = strTime.split(",");
+			String[] parts = strTime.split(":");
 			if(parts.length>2){
+		
 			String stage = parts[0];	
 			String start= parts[1];
+			
 			start.split(" ");
 			parts=start.split(" ");
 			start=parts[1];
-			System.out.println(strTime);
-			System.out.println(stage+start+strDay);
-			remove.removeAct(stage,start,strDay);	
+			System.out.println(start);
+			remove.removeAct(start);	
 			clearPanel(pnlMain);				
 			clearSchedule();
 			pnlThursday=getDaySchedule("Torsdag");
@@ -664,6 +665,7 @@ private class MemberListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		strBand="Valt Band";
+		
 		for(int i=0;i<btnBandList.size();i++){
 			if(btnBandList.get(i)==e.getSource()){
 				strBand=btnBandList.get(i).getText();

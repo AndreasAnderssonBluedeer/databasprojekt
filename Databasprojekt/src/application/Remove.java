@@ -25,7 +25,7 @@ public class Remove {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			System.out.println("driver true");
 			con = (com.mysql.jdbc.Connection) DriverManager.getConnection(
-					"jdbc:mysql://94.254.94.236:51515/andreas&david",
+					"jdbc:mysql://94.254.94.236:51515/andreas&david2",
 					"Andreas", "jody");
 			if (!con.isClosed()) {
 				System.out.println("Successfully connected to "
@@ -78,13 +78,12 @@ public class Remove {
 			e.printStackTrace();
 		}
 	}
-	public void removeAct(String stage,String start,String day){			//Scen,Starttid,Dag
+	public void removeAct(String showID){			//Scen,Starttid,Dag
 		PreparedStatement statement1;
 		
 		try {
 			statement1 = (PreparedStatement) con
-					.prepareStatement("delete from speltid where Scennamn='"+stage+"'"
-							+ "and Starttid='"+start+"' and Dag='"+day+"'");
+					.prepareStatement("delete from speltid where SpeltidsID='"+showID+"'");
 			statement1.execute();
 			
 			//******TEST*** SKA TAS BORT SEDAN
@@ -95,7 +94,8 @@ public class Remove {
 			while(result4.next()){		
 			System.out.println(result4.getString(1)+result4.getString(5));
 			
-			}} catch (SQLException e) {
+			}JOptionPane.showMessageDialog(null, "Speltid raderad.");
+			} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null,"Hoppsan,något gick snett. Testa igen!");
 			e.printStackTrace();
 		}
@@ -173,7 +173,7 @@ public class Remove {
 		try {
 			q.connection();
 			q.removeBand("Sillarna");
-			q.removeAct("Magestic", "17.45","Fredag");
+			
 			q.removeContact("19901212-1212");
 			q.removeSecurity("1");
 			q.removeMember("90");

@@ -110,7 +110,7 @@ public class GuiVisitor extends JPanel {
 		
 		
 		JLabel lblTitle=new JLabel("BAND:");
-		lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));	
+		lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));	
 		lblTitle.setHorizontalAlignment(JLabel.RIGHT);
 		lblTitle.setForeground(Color.LIGHT_GRAY);
 		lblTitle.setPreferredSize(new Dimension(550,80));
@@ -177,7 +177,7 @@ public class GuiVisitor extends JPanel {
 		JPanel pnlCompleteDay=new JPanel();
 		pnlCompleteDay.setBackground(Color.DARK_GRAY);
 		
-		schedule=info.getSchedule(day);
+		schedule=info.getScheduleVisitor(day);
 				
 		JPanel pnlDay=new JPanel();
 		pnlDay.setBackground(Color.DARK_GRAY);
@@ -197,7 +197,7 @@ public class GuiVisitor extends JPanel {
 		
 			
 			for(int i=0;i<schedule.size();i++){	//Kommer sedan bli bandlistans längd*
-				btnDayList.add(new JButton(schedule.get(i).substring(0, schedule.get(i).length() - 5)));	//Band+i ==Databas-BandNamn
+				btnDayList.add(new JButton(schedule.get(i)));	//Band+i ==Databas-BandNamn
 				btnDayList.get(i).setPreferredSize(new Dimension(400,35));
 				btnDayList.get(i).setBackground(Color.GRAY);
 				btnDayList.get(i).addActionListener(new ScheduleListener());
@@ -214,7 +214,7 @@ public class GuiVisitor extends JPanel {
 		
 		pnlBandMembers.add(getHomeBtn());
 		
-		String [] parts=info.getBandInfo(bandname).split("Kontakt");
+		String [] parts=info.getBandInfo(bandname).split("BandID");
 		JLabel lblTitle=new JLabel(parts[0]);
 		lblTitle.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));	
 		lblTitle.setHorizontalAlignment(JLabel.CENTER);
@@ -224,7 +224,7 @@ public class GuiVisitor extends JPanel {
 		pnlBandMembers.add(lblTitle);
 		
 		
-		members=info.getMembers(bandname);
+		members=info.getMembersVisitor(bandname);
 		
 		btnMemberList=new ArrayList<>();
 		for(int i=0;i<members.size();i++){	//Kommer sedan bli bandlistans längd*

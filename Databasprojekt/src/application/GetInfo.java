@@ -33,7 +33,7 @@ public class GetInfo {
             System.out.println("driver true");
 
             con = (com.mysql.jdbc.Connection) DriverManager.getConnection(
-					"jdbc:mysql://94.254.94.236:51515/andreas&david",
+					"jdbc:mysql://94.254.94.236:51515/andreas&david2",
 					"Andreas", "jody");
             if (!con.isClosed()) {
                 System.out.println("Successfully connected to "
@@ -57,22 +57,47 @@ public class GetInfo {
             } 
             
     
-    public ArrayList<String> getBands() throws Exception{
+    public ArrayList<String> getBands() {
     	bands = new ArrayList<>();
-		PreparedStatement statement = (PreparedStatement) con.prepareStatement("select * from band");
-		
-		ResultSet result = statement.executeQuery();
-		while(result.next()){
-			bands.add(result.getString(1));
+		PreparedStatement statement;
+		try {
+			statement = (PreparedStatement) con.prepareStatement("select * from band");
+			ResultSet result = statement.executeQuery();
+			while(result.next()){
+				bands.add(result.getString(1));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-    	return bands;
+		
+		return bands;
+		}
+    public String getBandID(String band){
+    	String bandid="?";	
+		try {
+			PreparedStatement statement = (PreparedStatement) con.prepareStatement("select BandID from band "					
+					+ "where Bandnamn='"+band+"'");			
+			ResultSet result;
+			result = statement.executeQuery();	
+			result.next();
+			bandid=result.getString(1);			
+			System.out.println(bandid);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			return bandid;
     }
+    
     public ArrayList<String> getMembers(String band) {
 
     	members = new ArrayList<>();
 		PreparedStatement statement;
 		try {
-			statement = (PreparedStatement) con.prepareStatement("select * from bandmedlem where Band='"+band+"'");
+			statement = (PreparedStatement) con.prepareStatement("select * from bandmedlem"
+					+ " inner join band on band.BandID=bandmedlem.Band"
+					+ " where band.Bandnamn='"+band+"'");
 			
 			ResultSet result = statement.executeQuery();
 			System.out.println(band+3);
@@ -89,18 +114,49 @@ public class GetInfo {
 		}
     	return members;
     }
+    public ArrayList<String> getMembersVisitor(String band) {
+
+    	members = new ArrayList<>();
+		PreparedStatement statement;
+		try {
+			statement = (PreparedStatement) con.prepareStatement("select * from bandmedlem"
+					+ " inner join band on band.BandID=bandmedlem.Band"
+					+ " where band.Bandnamn='"+band+"'");
+			
+			ResultSet result = statement.executeQuery();
+			System.out.println(band+3);
+			while(result.next()){
+				members.add("Namn: "+result.getString(2)+" Information: "+result.getString(3));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for(int i=0;i<members.size();i++){
+			System.out.println(members.get(i));
+		}
+    	return members;
+    }
     public String getBandInfo(String bandname) {
     	String bandinfo="?";
 		
 		try {
-			PreparedStatement statement = (PreparedStatement) con.prepareStatement("select * from band where Bandnamn='"+bandname+"'");
+			PreparedStatement statement = (PreparedStatement) con.prepareStatement("select Bandnamn,Land,Genre,Kontakt,BandID,"
+					+ "kontaktperson.Kontaktnamn from band "
+					+ "Inner join kontaktperson "
+					+ "On kontaktperson.Kontaktid=band.Kontakt "
+					+ "where Bandnamn='"+bandname+"'");
 			
 			ResultSet result;
 			result = statement.executeQuery();
 		
 			result.next();
 			bandinfo="Band: "+result.getString(1)+" Land: "+result.getString(2)+
-					" Genre: "+result.getString(3)+" Kontakt: "+result.getString(4);
+					" Genre: "+result.getString(3)+"\n BandID:"+result.getString(5)
+					+" Kontakt:"+result.getString(4)+", "+result.getString(6);
+			
+			System.out.println(bandinfo);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -125,6 +181,32 @@ public class GetInfo {
 		}
     	return contacts;
     } 
+    public String [] getStages() {
+    ArrayList<String>stages = new ArrayList<>();
+		PreparedStatement statement;
+		try {
+			statement = (PreparedStatement) con.prepareStatement("select * from scen");
+		
+		
+		ResultSet result = statement.executeQuery();
+		
+		while(result.next()){
+			stages.add(result.getString(3)+", "+result.getString(1));
+			
+		}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Kunde inte hämta info från Databasen!");
+			e.printStackTrace();
+		}
+		String [] arr=new String [stages.size()];
+		for(int i=0;i<arr.length;i++){
+			arr[i]=stages.get(i);
+		}
+		
+		
+    	return arr;
+    	
+    } 
     public ArrayList<String> getSecurity() {
     	security = new ArrayList<>();
 		PreparedStatement statement;
@@ -146,13 +228,46 @@ public class GetInfo {
     	schedule = new ArrayList<>();
 		PreparedStatement statement;
 		try {
-			statement = (PreparedStatement) con.prepareStatement("select * from speltid Where Dag='"+day+"'");
+			statement = (PreparedStatement) con.prepareStatement("select SpeltidsID,Starttid,Sluttid,band.Bandnamn,scen.Scennamn,Vakt, "
+					+ "sakerhetsansvarig.Namn from speltid "
+					+ "Inner Join band "
+					+ "On band.BandID=Akt "
+					+ "Inner join scen "
+					+ "On scen.ScenID=Scen "
+					+ "Inner join sakerhetsansvarig "
+					+ "On sakerhetsansvarig.SakerhetsID=Vakt "
+					+ "Where Dag='"+day+"' "
+					+ "Order by Starttid");
+		
+		ResultSet result = statement.executeQuery();
+		while(result.next()){
+			schedule.add("ID: "+result.getString(1)+" KL: "+result.getString(2)+" - "+result.getString(3)+""
+					+ "    Band: "+result.getString(4)+""
+					+ "   Scen: "+
+					result.getString(5)+" Vakt: "+result.getString(6)+", "+result.getString(7));
+		}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Kunde inte hämta info från Databasen!");
+			e.printStackTrace();
+		}
+    	return schedule;
+    } 
+    public ArrayList<String> getScheduleVisitor(String day) {
+    	schedule = new ArrayList<>();
+		PreparedStatement statement;
+		try {
+			statement = (PreparedStatement) con.prepareStatement("select Starttid,Sluttid,band.Bandnamn,scen.Scennamn from speltid"
+					+ " Inner Join band "
+					+ "On band.BandID=Akt "
+					+ "Inner join scen "
+					+ "On scen.ScenID=Scen "
+					+ "Where Dag='"+day+"'");
 		
 		
 		ResultSet result = statement.executeQuery();
 		while(result.next()){
-			schedule.add(result.getString(1)+", "+result.getString(2)+", "+result.getString(3)+", "+
-		result.getString(5)+", "+result.getString(6));
+			schedule.add("KL: "+result.getString(1)+" - "+result.getString(2)+"    Band: "+result.getString(3)+"    Scen: "+
+		result.getString(4));
 		}
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Kunde inte hämta info från Databasen!");
@@ -162,6 +277,9 @@ public class GetInfo {
     } 
     public static void main(String [] args) {
 		GetInfo q = new GetInfo();
+		
+		
+			System.out.println(q.getBandID("AC/DC"));
 		
 	}
 
