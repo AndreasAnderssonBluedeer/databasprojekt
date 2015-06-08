@@ -25,9 +25,9 @@ import javax.swing.ScrollPaneConstants;
 
 public class GuiStaff extends JPanel {
 	private ArrayList<JButton> btnBandList,btnMemberList,btnSecurityList,btnContactList,btnDayList,btnStageList;
-	private GetInfo info = new GetInfo();
-	private Remove remove=new Remove();
-	private Add add=new Add();
+	private GetInfo info;
+	private Remove remove;
+	private Add add;
 	
 	private ArrayList<String> bands = new ArrayList <>();
 	private ArrayList<String> contacts = new ArrayList <>();
@@ -52,7 +52,11 @@ public class GuiStaff extends JPanel {
 	private boolean removeTime,removeBand,removeMember,removeContact,removeSecurity,removeStage;
 
 	
-	public GuiStaff(){	
+	public GuiStaff(String connection){	
+		
+		info = new GetInfo(connection);
+		remove=new Remove(connection);
+		add=new Add(connection);
 		
 		pnlStart=showStartScreen();
 		pnlBandMenu=showBands();
@@ -852,10 +856,22 @@ public void actionPerformed(ActionEvent e) {
 }
 }
 public static void main(String [] args){
+	JFrame frame = new JFrame("Välj anslutning.");
+	String [] choice=new String [2];
+	choice[0]="195.178.232.7:4040";
+	choice[1]="195.178.232.16:3306";
+	String ip= (String) JOptionPane.showInputDialog(frame, 
+	        "Välj anslutning, :4040 för nätverk utanför MAH.",
+	        "Välj extern/intern anslutning.",
+	        JOptionPane.QUESTION_MESSAGE, 
+	        null, 
+	        choice, 
+	        choice[0]);
+	
 	JFrame f= new JFrame("Festivalinfo-Personal");
 	f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	f.add(new GuiStaff());
-	f.setLocation(500, 100);
+	f.add(new GuiStaff(ip));
+	f.setLocation(300, 100);
 	f.setSize(800, 600);
 	f.setVisible(true);
 	f.setResizable(false);

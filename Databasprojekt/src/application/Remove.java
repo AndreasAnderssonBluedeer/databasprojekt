@@ -10,7 +10,9 @@ import com.mysql.jdbc.Connection;
 
 public class Remove {
 	private Connection con;
-	public Remove(){
+	private String connection;
+	public Remove(String connection){
+		this.connection=connection;
 		try {
 			connection();
 		} catch (Exception e) {
@@ -25,8 +27,8 @@ public class Remove {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			System.out.println("driver true");
 			con = (com.mysql.jdbc.Connection) DriverManager.getConnection(
-					"jdbc:mysql://94.254.94.236:51515/andreas&david2",
-					"Andreas", "jody");
+					"jdbc:mysql://"+connection+"/ae6961",
+					"AE6961", "Ibanez2011");
 			if (!con.isClosed()) {
 				System.out.println("Successfully connected to "
 						+ "MySQL server using TCP/IP...");
@@ -183,7 +185,7 @@ public class Remove {
 	}
 	
 	public static void main(String[] args) {
-		Remove q = new Remove();
+		Remove q = new Remove("195.178.232.7:4040");
 		try {
 			q.connection();
 			q.removeBand("Sillarna");

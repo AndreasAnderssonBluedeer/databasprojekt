@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -27,7 +28,7 @@ import javax.swing.ScrollPaneConstants;
 public class GuiVisitor extends JPanel {
 	
 	private ArrayList<JButton> btnBandList,btnMemberList,btnSecurityList,btnContactList,btnDayList;
-	private GetInfo info = new GetInfo();
+	private GetInfo info;
 	
 	private ArrayList<String> bands = new ArrayList <>();
 	private ArrayList<String> schedule = new ArrayList <>();
@@ -39,8 +40,10 @@ public class GuiVisitor extends JPanel {
 	private String bandname="Bandnamn:";
 	private String strBand,strMember,strTime,strDay;
 	
-	public GuiVisitor(){
+	public GuiVisitor(String connection){
 
+		info = new GetInfo(connection);
+		
 		pnlStart=showStartScreen();
 		pnlBands=showBands();
 		pnlSchedule=showSchedule();
@@ -351,10 +354,21 @@ private class BandListener implements ActionListener{
 	}
 	
 	public static void main(String [] args){
+		JFrame frame = new JFrame("Välj anslutning.");
+		String [] choice=new String [2];
+		choice[0]="195.178.232.7:4040";
+		choice[1]="195.178.232.16:3306";
+		String ip= (String) JOptionPane.showInputDialog(frame, 
+		        "Välj anslutning, :4040 för nätverk utanför MAH.",
+		        "Välj extern/intern anslutning.",
+		        JOptionPane.QUESTION_MESSAGE, 
+		        null, 
+		        choice, 
+		        choice[0]);
 		JFrame f= new JFrame("Festivalinfo-Besökare");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.add(new GuiVisitor());
-		f.setLocation(500, 100);
+		f.add(new GuiVisitor(ip));
+		f.setLocation(300, 100);
 		f.setSize(800, 600);
 		f.setVisible(true);
 		f.setResizable(false);

@@ -13,8 +13,11 @@ import com.mysql.jdbc.Connection;
 
 public class Add {
 	private Connection con;
-	private GetInfo info=new GetInfo();
-	public Add(){
+	private GetInfo info;
+	private String connection;
+	public Add(String connection){
+		this.connection=connection;
+		info=new GetInfo(connection);
 		try {
 			connection();
 		} catch (Exception e) {
@@ -29,8 +32,8 @@ public class Add {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			System.out.println("driver true");
 			con = (com.mysql.jdbc.Connection) DriverManager.getConnection(
-					"jdbc:mysql://94.254.94.236:51515/andreas&david2",
-					"Andreas", "jody");
+					"jdbc:mysql://"+connection+"/ae6961",
+					"AE6961", "Ibanez2011");
 			if (!con.isClosed()) {
 				System.out.println("Successfully connected to "
 						+ "MySQL server using TCP/IP...");
@@ -297,7 +300,7 @@ public class Add {
 		}
 	}
 	public static void main(String[] args) {
-		Add q=new Add();
+		Add q=new Add("195.178.232.7:4040");
 		try {
 			
 //			q.addBand();

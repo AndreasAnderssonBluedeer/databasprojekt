@@ -17,7 +17,9 @@ public class GetInfo {
 	private ArrayList<String> schedule = new ArrayList<>();
 	private ArrayList<String> members = new ArrayList<>();
 	private Connection con;
-	public GetInfo(){
+	private String connection;
+	public GetInfo(String connection){
+		this.connection=connection;
 		try {
 			connection();
 		} catch (Exception e) {
@@ -33,8 +35,8 @@ public class GetInfo {
             System.out.println("driver true");
 
             con = (com.mysql.jdbc.Connection) DriverManager.getConnection(
-					"jdbc:mysql://94.254.94.236:51515/andreas&david2",
-					"Andreas", "jody");
+            		"jdbc:mysql://"+connection+"/ae6961",
+					"AE6961", "Ibanez2011");
             if (!con.isClosed()) {
                 System.out.println("Successfully connected to "
                         + "MySQL server using TCP/IP...");
@@ -153,7 +155,7 @@ public class GetInfo {
 		
 			result.next();
 			bandinfo="Band: "+result.getString(1)+" Land: "+result.getString(2)+
-					" Genre: "+result.getString(3)+"\n BandID:"+result.getString(5)
+					" Genre: "+result.getString(3)+" BandID:"+result.getString(5)
 					+" Kontakt:"+result.getString(4)+", "+result.getString(6);
 			
 			System.out.println(bandinfo);
@@ -300,7 +302,7 @@ public class GetInfo {
     	return schedule;
     } 
     public static void main(String [] args) {
-		GetInfo q = new GetInfo();
+		GetInfo q = new GetInfo("195.178.232.7:4040");
 		
 		
 			System.out.println(q.getBandID("AC/DC"));
